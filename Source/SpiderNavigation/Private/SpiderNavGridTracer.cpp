@@ -16,7 +16,7 @@ ASpiderNavGridTracer::ASpiderNavGridTracer()
 	CollisionComp->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 	CollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic, ECollisionResponse::ECR_Block);
 	CollisionComp->BodyInstance.SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics, true);
-	CollisionComp->SetSphereRadius(32.f);
+	CollisionComp->SetSphereRadius(10.f);
 	RootComponent = CollisionComp;
 
 }

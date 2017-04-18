@@ -97,10 +97,11 @@ TArray<FSpiderNavNode*> ASpiderNavigation::FindNodesPath(FSpiderNavNode* StartNo
 
 
 	ResetGridMetrics();
+	//OpenList.Empty();
 	std::vector<FSpiderNavNode*> openList;
 	TArray<FSpiderNavNode*> ClosedList;
 
-	OpenList.Add(StartNode);
+	//OpenList.Add(StartNode);
 	openList.push_back(StartNode);
 	std::make_heap(openList.begin(), openList.end(), LessThanByNodeF());
 	StartNode->Opened = true;
@@ -370,7 +371,7 @@ FVector ASpiderNavigation::FindClosestNodeLocation(FVector Location)
 	return NodeLocation;
 }
 
-bool ASpiderNavigation::FindNextLocationAndNormal(FVector CurrentLocation, FVector TargetLocation, float Speed, FVector& NextLocation, FVector& Normal)
+bool ASpiderNavigation::FindNextLocationAndNormal(FVector CurrentLocation, FVector TargetLocation, FVector& NextLocation, FVector& Normal)
 {
 	FSpiderNavNode* StartNode = FindClosestNode(CurrentLocation);
 	FSpiderNavNode* EndNode = FindClosestNode(TargetLocation);
@@ -379,18 +380,9 @@ bool ASpiderNavigation::FindNextLocationAndNormal(FVector CurrentLocation, FVect
 	FSpiderNavNode* NextNode = NULL;
 
 	TArray<FSpiderNavNode*> NodesPath = FindNodesPath(StartNode, EndNode, bFoundPartialPath);
-	for (int32 i = 0; i < NodesPath.Num(); i++) {
-		FSpiderNavNode* Node = NodesPath[i];
-		
-		float Distance = (Node->Location - StartNode->Location).Size();
-		if (Distance > Speed) {
-			NextNode = Node;
-			break;
-		}
-	}
 	
-	if (!NextNode && NodesPath.Num() > 0) {
-		NextNode = NodesPath.Last();
+	if (NodesPath.Num() > 1) {
+		NextNode = NodesPath[1];
 	}
 
 	if (!NextNode) {

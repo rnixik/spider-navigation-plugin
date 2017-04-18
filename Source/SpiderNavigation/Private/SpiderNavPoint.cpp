@@ -17,7 +17,7 @@ ASpiderNavPoint::ASpiderNavPoint()
 	CollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldDynamic, ECollisionResponse::ECR_Overlap);
 	CollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
 	CollisionComp->BodyInstance.SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-	CollisionComp->SetSphereRadius(32.f);
+	CollisionComp->SetSphereRadius(10.f);
 
 	RootComponent = CollisionComp;
 }
