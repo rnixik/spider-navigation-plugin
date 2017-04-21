@@ -140,5 +140,8 @@ public:
 	FVector FindClosestNodeLocation(FVector Location);
 
 	UFUNCTION(BlueprintCallable, Category = "SpiderNavigation")
+	FVector FindClosestNodeNormal(FVector Location);
+
+	UFUNCTION(BlueprintCallable, Category = "SpiderNavigation")
 	bool FindNextLocationAndNormal(FVector CurrentLocation, FVector TargetLocation, FVector& NextLocation, FVector& Normal);
 };

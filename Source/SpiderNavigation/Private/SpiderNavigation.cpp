@@ -371,6 +371,16 @@ FVector ASpiderNavigation::FindClosestNodeLocation(FVector Location)
 	return NodeLocation;
 }
 
+FVector ASpiderNavigation::FindClosestNodeNormal(FVector Location)
+{
+	FVector NodeNormal;
+	FSpiderNavNode* Node = FindClosestNode(Location);
+	if (Node) {
+		NodeNormal = Node->Normal;
+	}
+	return NodeNormal;
+}
+
 bool ASpiderNavigation::FindNextLocationAndNormal(FVector CurrentLocation, FVector TargetLocation, FVector& NextLocation, FVector& Normal)
 {
 	FSpiderNavNode* StartNode = FindClosestNode(CurrentLocation);
