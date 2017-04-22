@@ -10,9 +10,7 @@ public class SpiderNavigation : ModuleRules
             new string[] {
                 "Core",
                 "CoreUObject",
-                "Engine",
-                "InputCore",
-                "UnrealEd"
+                "Engine"
             });
 
 
@@ -20,9 +18,7 @@ public class SpiderNavigation : ModuleRules
 			new string[] {
 				"Core",
 				"CoreUObject",
-				"Engine",
-                "InputCore",
-                "UnrealEd"
+				"Engine"
             }
 			);
 	}

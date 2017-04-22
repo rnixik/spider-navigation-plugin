@@ -3,26 +3,24 @@
 	"Version": 1,
 	"VersionName": "1.0",
 	"FriendlyName": "SpiderNavigation",
-	"Description": "Custom navigation system suitable for spiders",
+	"Description": "A custom navigation system suitable for spiders",
 	"Category": "Gameplay",
-	"CreatedBy": "",
-	"CreatedByURL": "",
-	"DocsURL": "",
+	"CreatedBy": "Roman Nix",
+	"CreatedByURL": "http://me.getid.org/",
+	"DocsURL": "https://github.com/rnixik/spider-navigation-plugin",
 	"MarketplaceURL": "",
 	"SupportURL": "",
 	"CanContainContent": true,
 	"IsBetaVersion": false,
 	"Installed": false,
-	
 	"Modules": [
-        {
-            "Name": "SpiderNavigation",
-            "Type": "Runtime",
-            "LoadingPhase" : "Default",
-			"WhitelistPlatforms" :
-			[
+		{
+			"Name": "SpiderNavigation",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"WhitelistPlatforms": [
 				"Win64"
 			]
-        }
-    ]
+		}
+	]
 }
