@@ -3,7 +3,7 @@
 It implements custom navigation system suitable for spiders.
 Navigation grid builds on floors, walls, ceilings.
 
-[[http://s.getid.org/github/spider-navigation-plugin.gif|alt=a demonstration of spider navigation]]
+![A demonstration of spider navigation](http://s.getid.org/github/spider-navigation-plugin.gif)
 
 ## How it works
 
