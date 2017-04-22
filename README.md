@@ -3,7 +3,11 @@
 It implements custom navigation system suitable for spiders.
 Navigation grid builds on floors, walls, ceilings.
 
-How it works:
+[[http://s.getid.org/github/spider-navigation-plugin.gif|alt=a demonstration of spider navigation]]
+
+## How it works
+
+### To build grid
 
 1. Scene filled up with special actors `Tracer` in specified volume with specified step.
 2. From each tracer plugin traces to the nearest WorldStatic.
@@ -12,6 +16,9 @@ How it works:
 5. Checks visibility between these two actors. If they are visible to each other - add connection. If not - add to the list of pissible neighbors.
 6. Iterates the list of pissible neighbors and traces in 6 directions from each of two points for possible connection through an edge. 
 Checks visibility between points of intersection. If a point of intersection is visible to each of two points - add a new point `NavPointEdge` and connections between them.
+
+### To find path
+* Plugin implements A* to find path. Can return a normal to each navigation point.
 
 Plugin contains auxiliary blueprints for movement on this grid:
 
