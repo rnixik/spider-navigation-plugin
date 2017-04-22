@@ -50,6 +50,12 @@ public:
 	bool bUseActorWhiteList;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpiderNavGridBuilder")
+	TArray<AActor*> ActorsBlackList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpiderNavGridBuilder")
+	bool bUseActorBlackList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpiderNavGridBuilder")
 	bool bAutoRemoveTracers;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpiderNavGridBuilder")
@@ -73,6 +79,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpiderNavGridBuilder")
 	float EgdeDeviationModificator;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpiderNavGridBuilder")
+    bool bShouldTryToRemoveTracersEnclosedInVolumes;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpiderNavGridBuilder")
+    float TracersInVolumesCheckDistance;
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -85,6 +97,8 @@ protected:
 	TMap<int32, FVector> NavPointsNormals;
 
 	void TraceFromAllTracers();
+
+	void RemoveTracersClosedInVolumes();
 
 	void AddNavPointByHitResult(FHitResult RV_Hit);
 

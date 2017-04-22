@@ -20,6 +20,7 @@ ASpiderNavGridBuilder::ASpiderNavGridBuilder()
 
 	GridStepSize = 100.0f;
 	bUseActorWhiteList = false;
+	bUseActorBlackList = false;
 	bAutoRemoveTracers = true;
 	bAutoSaveGrid = true;
 
@@ -33,6 +34,8 @@ ASpiderNavGridBuilder::ASpiderNavGridBuilder()
 	ConnectionSphereRadiusModificator = 1.5f;
 	TraceDistanceForEdgesModificator = 1.9f;
 	EgdeDeviationModificator = 0.15f;
+	TracersInVolumesCheckDistance = 100000.0f;
+	bShouldTryToRemoveTracersEnclosedInVolumes = false;
 }
 
 // Called when the game starts or when spawned
@@ -54,6 +57,12 @@ int32 ASpiderNavGridBuilder::BuildGrid()
 	EmptyAll();
 	UE_LOG(SpiderNAVGRID_LOG, Log, TEXT("Spawn tracers"));
 	SpawnTracers();
+
+	if (bShouldTryToRemoveTracersEnclosedInVolumes) {
+		UE_LOG(SpiderNAVGRID_LOG, Log, TEXT("RemoveTracersClosedInVolumes"));
+		RemoveTracersClosedInVolumes();
+	}
+
 	UE_LOG(SpiderNAVGRID_LOG, Log, TEXT("Trace from all tracers"));
 	TraceFromAllTracers();
 	
@@ -123,6 +132,88 @@ void ASpiderNavGridBuilder::SpawnTracers()
 	}
 }
 
+void ASpiderNavGridBuilder::RemoveTracersClosedInVolumes()
+{
+	FCollisionQueryParams RV_TraceParams = FCollisionQueryParams(FName(TEXT("RV_Trace")), false, this);
+	RV_TraceParams.bTraceComplex = false;
+	RV_TraceParams.bTraceAsyncScene = true;
+	RV_TraceParams.bReturnPhysicalMaterial = false;
+
+	//ignore all tracers
+	TArray<AActor*> ActorsToIgnore;
+	for (int32 i = 0; i < Tracers.Num(); ++i)
+	{
+		AActor* Actor = Cast<AActor>(Tracers[i]);
+		ActorsToIgnore.Add(Actor);
+	}
+	RV_TraceParams.AddIgnoredActors(ActorsToIgnore);
+
+	float TraceDistance = TracersInVolumesCheckDistance;
+
+	int32 RemovedNum = 0;
+
+	for (int32 i = 0; i < Tracers.Num(); ++i)
+	{
+		ASpiderNavGridTracer* Tracer = Tracers[i];
+
+		FVector StartLocation = Tracer->GetActorLocation();
+		FVector EndLocation;
+
+		TArray<AActor*> ActorsBumpedIn;
+
+		for (int32 x = -1; x <= 1; x++)
+		{
+			for (int32 y = -1; y <= 1; y++)
+			{
+				for (int32 z = -1; z <= 1; z++)
+				{
+					FVector Direction = FVector(x, y, z);
+					if (Direction.Size() == 1)
+					{
+
+						EndLocation = StartLocation + Direction * TraceDistance;
+						FHitResult RV_Hit(ForceInit);
+
+						GetWorld()->LineTraceSingleByChannel(
+							RV_Hit,
+							StartLocation,
+							EndLocation,
+							ECC_WorldStatic,
+							RV_TraceParams
+						);
+
+						if (RV_Hit.bBlockingHit)
+						{
+							AActor* BlockingActor = RV_Hit.GetActor();
+							ActorsBumpedIn.Add(BlockingActor);
+						}
+						
+					}
+				}
+			}
+		}
+
+		// remove iterated tracer if there is the same actor around the tracer in 6 directions
+		if (ActorsBumpedIn.Num() == 6) {
+			AActor* FirstActor = ActorsBumpedIn[0];
+			bool bFoundDifferent = false;
+			for (AActor* ActorBumpedIn : ActorsBumpedIn)
+			{
+				if (ActorBumpedIn != FirstActor) {
+					bFoundDifferent = true;
+				}
+			}
+			if (!bFoundDifferent) {
+				Tracers.Remove(Tracer);
+				RemovedNum++;
+			}
+		}
+
+	}
+
+	UE_LOG(SpiderNAVGRID_LOG, Warning, TEXT("Removed enclosed tracers: %d"), RemovedNum);
+}
+
 void ASpiderNavGridBuilder::TraceFromAllTracers()
 {
 	FCollisionQueryParams RV_TraceParams = FCollisionQueryParams(FName(TEXT("RV_Trace")), false, this);
@@ -147,11 +238,11 @@ void ASpiderNavGridBuilder::TraceFromAllTracers()
 		FVector StartLocation = Tracer->GetActorLocation();
 		FVector EndLocation;
 
-		for (int32 x = -1; x <= 1; ++x)
+		for (int32 x = -1; x <= 1; x++)
 		{
-			for (int32 y = -1; y <= 1; ++y)
+			for (int32 y = -1; y <= 1; y++)
 			{
-				for (int32 z = -1; z <= 1; ++z)
+				for (int32 z = -1; z <= 1; z++)
 				{
 					FVector Direction = FVector(x, y, z);
 					if (Direction.Size() == 1)
@@ -186,8 +277,9 @@ void ASpiderNavGridBuilder::AddNavPointByHitResult(FHitResult RV_Hit)
 	if (RV_Hit.bBlockingHit)
 	{
 
+		AActor* BlockingActor = RV_Hit.GetActor();
+
 		if (bUseActorWhiteList) {
-			AActor* BlockingActor = RV_Hit.GetActor();
 			bool bFoundFromWhiteList = false;
 			for (int32 i = 0; i < ActorsWhiteList.Num(); ++i) {
 				if (ActorsWhiteList[i] == BlockingActor) {
@@ -197,6 +289,14 @@ void ASpiderNavGridBuilder::AddNavPointByHitResult(FHitResult RV_Hit)
 			}
 			if (!bFoundFromWhiteList) {
 				return;
+			}
+		}
+
+		if (bUseActorBlackList) {
+			for (AActor* BlackListedActor : ActorsBlackList) {
+				if (BlockingActor == BlackListedActor) {
+					return;
+				}
 			}
 		}
 
