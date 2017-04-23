@@ -49,7 +49,9 @@ Plugin contains auxiliary blueprints for movement on this grid:
 
 Plugin autosaves navigation grid. Try to click `Stop` and `Play` again. `Spider` pawn should follow you.
 
-https://www.youtube.com/watch?v=ayobvtejDKg
+Here is a video guide:
+
+[![Video guide](https://img.youtube.com/vi/ayobvtejDKg/0.jpg)](https://www.youtube.com/watch?v=ayobvtejDKg)
 
 
 ## Configuration
