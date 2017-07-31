@@ -26,6 +26,7 @@
 #include "Runtime/Engine/Classes/Components/SphereComponent.h"
 #include "SpiderNavGridTracer.generated.h"
 
+/** Actor which traces for world objects with collisions */
 UCLASS()
 class ASpiderNavGridTracer : public AActor
 {

@@ -32,31 +32,46 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(SpiderNAV_LOG, Log, All);
 
+/** Describes navigation point in grid */
 USTRUCT()
 struct FSpiderNavNode
 {
 	GENERATED_BODY()
 
+    /** Location of node */
 	UPROPERTY()
 	FVector Location;
 
+    /** Normal of node from nearest world object with collision */
 	UPROPERTY()
 	FVector Normal;
 
-
+    /** Index (id) of node */
 	UPROPERTY()
 	int32 Index;
 
+    /** Relations */
 	TArray <FSpiderNavNode*> Neighbors;
 
+    /** F-value of node from A-star */
 	float F;
+
+	/** G-value of node from A-star */
 	float G;
+
+	/** H-value of node from A-star */
 	float H;
+
+	/** Opened property of node from A-star */
 	bool Opened;
+
+	/** Closed propery of node from A-star */
 	bool Closed;
+
+	/** Index (id) of parent node from A-star */
 	int32 ParentIndex;
 
-
+    /** Initialization of node */
 	FSpiderNavNode()
 	{
 		Location = FVector(0.0f, 0.0f, 0.0f);
@@ -71,6 +86,7 @@ struct FSpiderNavNode
 		Neighbors.Empty();
 	}
 
+    /** Resets metriks of A-star */
 	void ResetMetrics()
 	{
 		F = 0.0f;
@@ -82,19 +98,21 @@ struct FSpiderNavNode
 	}
 };
 
+/** Comparator < of nodes by F-value */
 struct LessThanByNodeF {
 	bool operator()(const FSpiderNavNode* lhs, const FSpiderNavNode* rhs) const {
 		return lhs->F > rhs->F;
 	}
 };
 
+/**  Comparator < of nodes by H-value */
 struct LessThanByNodeH {
 	bool operator()(const FSpiderNavNode* lhs, const FSpiderNavNode* rhs) const {
 		return lhs->H > rhs->H;
 	}
 };
 
-
+/** Class for navigation between nodes with A-star */
 UCLASS()
 class ASpiderNavigation : public AActor
 {
@@ -140,29 +158,35 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpiderNavigation")
 	bool bAutoLoadGrid;
 
+    /** Thickness of debug lines */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpiderNavGridBuilder")
 	float DebugLinesThickness;
-	
+
+	/** Returns number of navigation nodes */
 	UFUNCTION(BlueprintCallable, Category = "SpiderNavigation")
 	int32 GetNavNodesCount();
 
-	
-
+	/** Finds path in grid. Returns array of nodes */
 	UFUNCTION(BlueprintCallable, Category = "SpiderNavigation")
 	TArray<FVector> FindPath(FVector Start, FVector End, bool& bFoundCompletePath);
 
+    /** Loads navigation grid from file */
 	UFUNCTION(BlueprintCallable, Category = "SpiderNavigation")
     bool LoadGrid();
 
+    /** Draws debug lines between connected nodes */
 	UFUNCTION(BlueprintCallable, Category = "SpiderNavigation")
 	void DrawDebugRelations();
 
+    /** Finds closest node's location in grid to specified location */
 	UFUNCTION(BlueprintCallable, Category = "SpiderNavigation")
 	FVector FindClosestNodeLocation(FVector Location);
 
+    /** Finds closest node's normal in grid to specified location  */
 	UFUNCTION(BlueprintCallable, Category = "SpiderNavigation")
 	FVector FindClosestNodeNormal(FVector Location);
 
+    /** Finds path between current location and target location and returns location and normal of the next fisrt node in navigation grid */
 	UFUNCTION(BlueprintCallable, Category = "SpiderNavigation")
 	bool FindNextLocationAndNormal(FVector CurrentLocation, FVector TargetLocation, FVector& NextLocation, FVector& Normal);
 };

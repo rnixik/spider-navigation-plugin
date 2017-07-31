@@ -22,36 +22,49 @@
 
 #pragma once
 
-#include "GameFramework/Actor.h"
-#include "Runtime/Engine/Classes/Components/SphereComponent.h"
-#include "SpiderNavPoint.generated.h"
+#include "GameFramework/SaveGame.h"
+#include "SpiderNavGridSaveGame.generated.h"
 
-UCLASS()
-class ASpiderNavPoint : public AActor
+/** Describes relations between navigation points*/
+USTRUCT()
+struct FSpiderNavRelations
 {
 	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
-	ASpiderNavPoint();
 
-	/** Sphere collision component */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpiderGridBuilder")
-	class USphereComponent* CollisionComp;
+    /** Array of indexes of neighboring navigtaion points*/
+	UPROPERTY()
+	TArray<int32> Neighbors;
+};
 
-	TArray<ASpiderNavPoint*> Neighbors;
-	TArray<ASpiderNavPoint*> PossibleEdgeNeighbors;
+/**
+ *  A USaveGame's extension to store navigation
+ */
+UCLASS()
+class USpiderNavGridSaveGame : public USaveGame
+{
+	GENERATED_BODY()
 
-	FVector Normal;
+public:
+    /** Locations of navigation points */
+	UPROPERTY()
+	TMap<int32, FVector> NavLocations;
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+    /** Normals of navigation points */
+	UPROPERTY()
+	TMap<int32, FVector> NavNormals;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+    /** Relations between navigation points */
+	UPROPERTY()
+	TMap<int32, FSpiderNavRelations> NavRelations;
 
-	
-	
+    /** Name of save slot to store navigation grid */
+	UPROPERTY()
+	FString SaveSlotName;
+
+    /** UserIndex to store navigation grid */
+	UPROPERTY()
+	uint32 UserIndex;
+
+    /** Constructor */
+	USpiderNavGridSaveGame();
 };

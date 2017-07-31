@@ -36,6 +36,7 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(SpiderNAVGRID_LOG, Log, All);
 
+/** Provides settings to configure navigation builder. Builds navigation grid with relations, which can be saved to file */
 UCLASS()
 class ASpiderNavGridBuilder : public AActor
 {
@@ -45,6 +46,7 @@ public:
 	// Sets default values for this actor's properties
 	ASpiderNavGridBuilder();
 
+    /** Volume where to build navigation */
 	UPROPERTY(VisibleAnywhere, Category="SpiderNavGridBuilder")
 		UBoxComponent* VolumeBox;
 
@@ -112,9 +114,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpiderNavGridBuilder")
 	float EgdeDeviationModificator;
 
+    /** Whether should try to remove tracers enclosed in volumes */
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpiderNavGridBuilder")
     bool bShouldTryToRemoveTracersEnclosedInVolumes;
 
+    /** Distance threshold to remove tracers enclosed in volumes  */
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpiderNavGridBuilder")
     float TracersInVolumesCheckDistance;
 
@@ -168,15 +172,16 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
 	
-
+    /** Builds navigation grid. Returs number of navigations points */
 	UFUNCTION(BlueprintCallable, Category = "SpiderNavGridBuilder")
 	int32 BuildGrid();
 
+    /** Draws debug lines between connected navigation points */
 	UFUNCTION(BlueprintCallable, Category = "SpiderNavGridBuilder")
 	void DrawDebugRelations();
 
+    /** Saves navigation grid to save file */
 	UFUNCTION(BlueprintCallable, Category = "SpiderNavGridBuilder")
 	void SaveGrid();
 };

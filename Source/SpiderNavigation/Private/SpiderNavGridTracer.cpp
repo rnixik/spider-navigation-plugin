@@ -45,13 +45,10 @@ ASpiderNavGridTracer::ASpiderNavGridTracer()
 void ASpiderNavGridTracer::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
 void ASpiderNavGridTracer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
-

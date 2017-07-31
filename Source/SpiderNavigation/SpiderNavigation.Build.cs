@@ -13,13 +13,11 @@ public class SpiderNavigation : ModuleRules
                 "Engine"
             });
 
-
         PublicDependencyModuleNames.AddRange(
 			new string[] {
 				"Core",
 				"CoreUObject",
 				"Engine"
-            }
-			);
+            });
 	}
 }

@@ -161,8 +161,7 @@ void ASpiderNavGridBuilder::RemoveTracersClosedInVolumes()
 
 	//ignore all tracers
 	TArray<AActor*> ActorsToIgnore;
-	for (int32 i = 0; i < Tracers.Num(); ++i)
-	{
+	for (int32 i = 0; i < Tracers.Num(); ++i) {
 		AActor* Actor = Cast<AActor>(Tracers[i]);
 		ActorsToIgnore.Add(Actor);
 	}
@@ -172,8 +171,7 @@ void ASpiderNavGridBuilder::RemoveTracersClosedInVolumes()
 
 	int32 RemovedNum = 0;
 
-	for (int32 i = 0; i < Tracers.Num(); ++i)
-	{
+	for (int32 i = 0; i < Tracers.Num(); ++i) {
 		ASpiderNavGridTracer* Tracer = Tracers[i];
 
 		FVector StartLocation = Tracer->GetActorLocation();
@@ -181,15 +179,11 @@ void ASpiderNavGridBuilder::RemoveTracersClosedInVolumes()
 
 		TArray<AActor*> ActorsBumpedIn;
 
-		for (int32 x = -1; x <= 1; x++)
-		{
-			for (int32 y = -1; y <= 1; y++)
-			{
-				for (int32 z = -1; z <= 1; z++)
-				{
+		for (int32 x = -1; x <= 1; x++) {
+			for (int32 y = -1; y <= 1; y++) {
+				for (int32 z = -1; z <= 1; z++) {
 					FVector Direction = FVector(x, y, z);
-					if (Direction.Size() == 1)
-					{
+					if (Direction.Size() == 1) {
 
 						EndLocation = StartLocation + Direction * TraceDistance;
 						FHitResult RV_Hit(ForceInit);
@@ -202,8 +196,7 @@ void ASpiderNavGridBuilder::RemoveTracersClosedInVolumes()
 							RV_TraceParams
 						);
 
-						if (RV_Hit.bBlockingHit)
-						{
+						if (RV_Hit.bBlockingHit) {
 							AActor* BlockingActor = RV_Hit.GetActor();
 							ActorsBumpedIn.Add(BlockingActor);
 						}
@@ -242,8 +235,7 @@ void ASpiderNavGridBuilder::TraceFromAllTracers()
 	RV_TraceParams.bReturnPhysicalMaterial = false;
 
 	TArray<AActor*> ActorsToIgnore;
-	for (int32 i = 0; i < Tracers.Num(); ++i)
-	{
+	for (int32 i = 0; i < Tracers.Num(); ++i) {
 		AActor* Actor = Cast<AActor>(Tracers[i]);
 		ActorsToIgnore.Add(Actor);
 	}
@@ -251,22 +243,17 @@ void ASpiderNavGridBuilder::TraceFromAllTracers()
 
 	float TraceDistance = GridStepSize * TraceDistanceModificator;
 
-	for (int32 i = 0; i < Tracers.Num(); ++i)
-	{
+	for (int32 i = 0; i < Tracers.Num(); ++i) {
 		ASpiderNavGridTracer* Tracer = Tracers[i];
 
 		FVector StartLocation = Tracer->GetActorLocation();
 		FVector EndLocation;
 
-		for (int32 x = -1; x <= 1; x++)
-		{
-			for (int32 y = -1; y <= 1; y++)
-			{
-				for (int32 z = -1; z <= 1; z++)
-				{
+		for (int32 x = -1; x <= 1; x++) {
+			for (int32 y = -1; y <= 1; y++) {
+				for (int32 z = -1; z <= 1; z++) {
 					FVector Direction = FVector(x, y, z);
-					if (Direction.Size() == 1)
-					{
+					if (Direction.Size() == 1) {
 						
 						EndLocation = StartLocation + Direction * TraceDistance;
 
@@ -294,8 +281,7 @@ void ASpiderNavGridBuilder::TraceFromAllTracers()
 
 void ASpiderNavGridBuilder::AddNavPointByHitResult(FHitResult RV_Hit)
 {
-	if (RV_Hit.bBlockingHit)
-	{
+	if (RV_Hit.bBlockingHit) {
 
 		AActor* BlockingActor = RV_Hit.GetActor();
 
@@ -365,8 +351,7 @@ void ASpiderNavGridBuilder::BuildRelations()
 	
 
 	ASpiderNavPoint* NavPoint = NULL;
-	for (int32 i = 0; i < NavPoints.Num(); ++i)
-	{
+	for (int32 i = 0; i < NavPoints.Num(); ++i) {
 		NavPoint = NavPoints[i];
 		FCollisionQueryParams FCQP = FCollisionQueryParams(FName(TEXT("RV_Trace")), false, this);
 		FCQP.AddIgnoredActor(NavPoint);
@@ -381,21 +366,16 @@ void ASpiderNavGridBuilder::BuildRelations()
 		);
 
 		if (bIsOverlap) {
-			for (int32 j = 0; j < OutOverlaps.Num(); ++j)
-			{
+			for (int32 j = 0; j < OutOverlaps.Num(); ++j) {
 				FOverlapResult OverlapResult = OutOverlaps[j];
 				AActor* OverlappedActor = OverlapResult.GetActor();
-				if (OverlappedActor->IsA(ASpiderNavPoint::StaticClass()))
-				{
+				if (OverlappedActor->IsA(ASpiderNavPoint::StaticClass())) {
 					ASpiderNavPoint* OverlappedNavPoint = Cast<ASpiderNavPoint>(OverlappedActor);
 					bool bIsVisible = CheckNavPointsVisibility(NavPoint, OverlappedNavPoint);
-					if (bIsVisible)
-					{
+					if (bIsVisible) {
 						NavPoint->Neighbors.AddUnique(OverlappedNavPoint);
 						OverlappedNavPoint->Neighbors.AddUnique(NavPoint);
-					}
-					else
-					{
+					} else {
 						NavPoint->PossibleEdgeNeighbors.AddUnique(OverlappedNavPoint);
 					}
 					
@@ -410,8 +390,7 @@ void ASpiderNavGridBuilder::DrawDebugRelations()
 	ASpiderNavPoint* NavPoint = NULL;
 	ASpiderNavPoint* NeighborNavPoint = NULL;
 
-	for (int32 i = 0; i < NavPoints.Num(); ++i)
-	{
+	for (int32 i = 0; i < NavPoints.Num(); ++i) {
 		NavPoint = NavPoints[i];
 
 		FColor DrawColor = FLinearColor(0.0f, 1.0f, 0.0f, 1.0f).ToFColor(true);
@@ -431,8 +410,7 @@ void ASpiderNavGridBuilder::DrawDebugRelations()
 			DebugThickness
 		);
 
-		for (int32 j = 0; j < NavPoint->Neighbors.Num(); ++j)
-		{
+		for (int32 j = 0; j < NavPoint->Neighbors.Num(); ++j) {
 			NeighborNavPoint = NavPoint->Neighbors[j];
 			DrawDebugLine(
 				GetWorld(),
@@ -445,7 +423,6 @@ void ASpiderNavGridBuilder::DrawDebugRelations()
 				DebugThickness
 			);
 		}
-		
 
 	}
 }
@@ -474,8 +451,7 @@ bool ASpiderNavGridBuilder::CheckNavPointsVisibility(ASpiderNavPoint* NavPoint1,
 	);
 
 
-	if (!bBlockingFound)
-	{
+	if (!bBlockingFound) {
 		return false;
 	}
 
@@ -484,27 +460,8 @@ bool ASpiderNavGridBuilder::CheckNavPointsVisibility(ASpiderNavPoint* NavPoint1,
 		return false;
 	}
 
-	
-
 	if (BlockedActor == NavPoint2) {
 		return true;
-	}
-	else {
-		/*
-		FColor DrawColor = FLinearColor(1.0f, 1.0f, 0.0f, 1.0f).ToFColor(true);
-		DrawDebugLine(
-			GetWorld(),
-			NavPoint1->GetActorLocation(),
-			NavPoint2->GetActorLocation(),
-			DrawColor,
-			false,
-			20.0f,
-			0,
-			DebugThickness
-		);
-
-		DrawDebugString(GetWorld(), NavPoint1->GetActorLocation(), *FString::Printf(TEXT("[%s]"), *BlockedActor->GetName()), NULL, DrawColor, 20.0f, false);
-		*/
 	}
 
 	return false;
@@ -543,30 +500,21 @@ void ASpiderNavGridBuilder::BuildPossibleEdgeRelations()
 {
 	ASpiderNavPoint* NavPoint = NULL;
 	ASpiderNavPoint* PossibleNavPoint = NULL;
-	for (int32 i = 0; i < NavPoints.Num(); ++i)
-	{
+	for (int32 i = 0; i < NavPoints.Num(); ++i) {
 		NavPoint = NavPoints[i];
-		for (int32 j = 0; j < NavPoint->PossibleEdgeNeighbors.Num(); ++j)
-		{
+		for (int32 j = 0; j < NavPoint->PossibleEdgeNeighbors.Num(); ++j) {
 			PossibleNavPoint = NavPoint->PossibleEdgeNeighbors[j];
-			for (int32 x1 = -1; x1 <= 1; x1++)
-			{
-				for (int32 y1 = -1; y1 <= 1; y1++)
-				{
-					for (int32 z1 = -1; z1 <= 1; z1++)
-					{
-						for (int32 x2 = -1; x2 <= 1; x2++)
-						{
-							for (int32 y2 = -1; y2 <= 1; y2++)
-							{
-								for (int32 z2 = -1; z2 <= 1; z2++)
-								{
+			for (int32 x1 = -1; x1 <= 1; x1++) {
+				for (int32 y1 = -1; y1 <= 1; y1++) {
+					for (int32 z1 = -1; z1 <= 1; z1++) {
+						for (int32 x2 = -1; x2 <= 1; x2++) {
+							for (int32 y2 = -1; y2 <= 1; y2++) {
+								for (int32 z2 = -1; z2 <= 1; z2++) {
 									FVector Direction1 = FVector(x1, y1, z1);
 									FVector Direction2 = FVector(x2, y2, z2);
 									bool bOnlyOneNonZero = (Direction1.Size() == 1 && Direction2.Size() == 1);
 									bool bCorrespingValuesAreNotEqual = ((Direction1.GetAbs() - Direction2.GetAbs()).Size() != 0);
-									if (bOnlyOneNonZero && bCorrespingValuesAreNotEqual)
-									{
+									if (bOnlyOneNonZero && bCorrespingValuesAreNotEqual) {
 										FVector Start0 = NavPoint->GetActorLocation();
 										FVector End0 = NavPoint->GetActorLocation() + Direction1 * GridStepSize * TraceDistanceForEdgesModificator;
 										FVector Start1 = PossibleNavPoint->GetActorLocation();
@@ -599,7 +547,7 @@ bool ASpiderNavGridBuilder::GetLineLineIntersection(FVector Start0, FVector End0
 	float d0232 = Dmnop(&v, 0, 2, 3, 2);
 	float d3210 = Dmnop(&v, 3, 2, 1, 0);
 	float d3232 = Dmnop(&v, 3, 2, 3, 2);
-	float mu = (d0232 * d3210 - Dmnop(&v, 0, 2, 1, 0)*d3232) / (Dmnop(&v, 1, 0, 1, 0)*Dmnop(&v, 3, 2, 3, 2) - Dmnop(&v, 3, 2, 1, 0)*Dmnop(&v, 3, 2, 1, 0));
+	float mu = (d0232 * d3210 - Dmnop(&v, 0, 2, 1, 0)*d3232) / (Dmnop(&v, 1, 0, 1, 0) * Dmnop(&v, 3, 2, 3, 2) - Dmnop(&v, 3, 2, 1, 0) * Dmnop(&v, 3, 2, 1, 0));
     float NormalisedDistanceLine1 = (d0232 + mu * d3210) / d3232;
 		 
 	
@@ -661,8 +609,7 @@ void ASpiderNavGridBuilder::CheckAndAddIntersectionNavPointEdge(FVector Intersec
 
 void ASpiderNavGridBuilder::RemoveAllTracers()
 {
-	for (int32 i = 0; i < Tracers.Num(); ++i)
-	{
+	for (int32 i = 0; i < Tracers.Num(); ++i) {
 		Tracers[i]->Destroy();
 	}
 	Tracers.Empty();
@@ -677,14 +624,12 @@ void ASpiderNavGridBuilder::SaveGrid()
 	ASpiderNavPoint* NavPoint = NULL;
 	ASpiderNavPoint* NeighborNavPoint = NULL;
 
-	for (int32 i = 0; i < NavPoints.Num(); ++i)
-	{
+	for (int32 i = 0; i < NavPoints.Num(); ++i) {
 		NavPoint = NavPoints[i];
 		NavLocations.Add(i, NavPoint->GetActorLocation());
 		NavNormals.Add(i, NavPoint->Normal);
 		FSpiderNavRelations SpiderNavRelations;
-		for (int32 j = 0; j < NavPoint->Neighbors.Num(); ++j)
-		{
+		for (int32 j = 0; j < NavPoint->Neighbors.Num(); ++j) {
 			int32 NeighborIndex = GetNavPointIndex(NavPoint->Neighbors[j]);
 			SpiderNavRelations.Neighbors.Add(NeighborIndex);
 		}
@@ -700,8 +645,7 @@ void ASpiderNavGridBuilder::SaveGrid()
 
 int32 ASpiderNavGridBuilder::GetNavPointIndex(ASpiderNavPoint* NavPoint)
 {
-	for (int32 i = 0; i < NavPoints.Num(); ++i)
-	{
+	for (int32 i = 0; i < NavPoints.Num(); ++i) {
 		if (NavPoints[i] == NavPoint) {
 			return i;
 		}
@@ -714,15 +658,12 @@ void ASpiderNavGridBuilder::RemoveNoConnected()
 	TArray<ASpiderNavPoint*> FilteredNavPoints;
 	ASpiderNavPoint* NavPoint = NULL;
 
-	for (int32 i = 0; i < NavPoints.Num(); ++i)
-	{
+	for (int32 i = 0; i < NavPoints.Num(); ++i) {
 		NavPoint = NavPoints[i];
 
-		if (NavPoint->Neighbors.Num() > 1)
-		{
+		if (NavPoint->Neighbors.Num() > 1) {
 			FilteredNavPoints.Add(NavPoint);
-		}
-		else {
+		} else {
 			NavPoint->Destroy();
 		}
 	}
@@ -733,8 +674,7 @@ void ASpiderNavGridBuilder::RemoveNoConnected()
 void ASpiderNavGridBuilder::RemoveAllNavPoints()
 {
 	ASpiderNavPoint* NavPoint = NULL;
-	for (int32 i = 0; i < NavPoints.Num(); ++i)
-	{
+	for (int32 i = 0; i < NavPoints.Num(); ++i) {
 		NavPoint = NavPoints[i];
 		NavPoint->Destroy();
 	}

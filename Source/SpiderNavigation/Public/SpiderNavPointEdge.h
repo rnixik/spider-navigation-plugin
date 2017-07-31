@@ -22,41 +22,14 @@
 
 #pragma once
 
-#include "GameFramework/SaveGame.h"
-#include "SpiderNavGridSaveGame.generated.h"
-
-USTRUCT()
-struct FSpiderNavRelations
-{
-	GENERATED_BODY()
-
-	UPROPERTY()
-	TArray<int32> Neighbors;
-};
+#include "SpiderNavPoint.h"
+#include "SpiderNavPointEdge.generated.h"
 
 /**
- * 
+ *  Actor for navigation point on edge of objects. Using during grid building process.
  */
 UCLASS()
-class USpiderNavGridSaveGame : public USaveGame
+class ASpiderNavPointEdge : public ASpiderNavPoint
 {
 	GENERATED_BODY()
-
-public:
-	UPROPERTY()
-	TMap<int32, FVector> NavLocations;
-
-	UPROPERTY()
-	TMap<int32, FVector> NavNormals;
-
-	UPROPERTY()
-	TMap<int32, FSpiderNavRelations> NavRelations;
-	
-	UPROPERTY()
-	FString SaveSlotName;
-
-	UPROPERTY()
-	uint32 UserIndex;
-
-	USpiderNavGridSaveGame();
 };

@@ -22,18 +22,39 @@
 
 #pragma once
 
-#include "SpiderNavPoint.h"
-#include "SpiderNavPointEdge.generated.h"
+#include "GameFramework/Actor.h"
+#include "Runtime/Engine/Classes/Components/SphereComponent.h"
+#include "SpiderNavPoint.generated.h"
 
-/**
- * 
- */
+/** Actor for navigation point during navigation building */
 UCLASS()
-class ASpiderNavPointEdge : public ASpiderNavPoint
+class ASpiderNavPoint : public AActor
 {
 	GENERATED_BODY()
-	
-	
-	
-	
+
+public:	
+	// Sets default values for this actor's properties
+	ASpiderNavPoint();
+
+	/** Sphere collision component */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpiderGridBuilder")
+	class USphereComponent* CollisionComp;
+
+    /** Nearest navigation points which can be connected */
+	TArray<ASpiderNavPoint*> Neighbors;
+
+	/** Nearest navigation points which can be possible connected */
+	TArray<ASpiderNavPoint*> PossibleEdgeNeighbors;
+
+    /** Normal from nearest world object with collision */
+	FVector Normal;
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
 };

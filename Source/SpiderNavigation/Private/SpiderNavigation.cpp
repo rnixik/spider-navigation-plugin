@@ -47,7 +47,6 @@ void ASpiderNavigation::BeginPlay()
 void ASpiderNavigation::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void ASpiderNavigation::AddGridNode(int32 SavedIndex, FVector Location, FVector Normal)
@@ -62,14 +61,12 @@ void ASpiderNavigation::AddGridNode(int32 SavedIndex, FVector Location, FVector 
 	NodesSavedIndexes.Add(SavedIndex, Index);
 }
 
-
 void ASpiderNavigation::SetGridNodeNeighbors(int32 SavedIndex, TArray<int32> NeighborsSavedIndexes)
 {
 	int32* Index = NodesSavedIndexes.Find(SavedIndex);
 	if (Index) {
 		FSpiderNavNode* NavNode =  &(NavNodes[*Index]);
-		for (int32 i = 0; i != NeighborsSavedIndexes.Num(); ++i)
-		{
+		for (int32 i = 0; i != NeighborsSavedIndexes.Num(); ++i) {
 			 int32* NeighborIndex = NodesSavedIndexes.Find(NeighborsSavedIndexes[i]);
 			 if (NeighborIndex) {
 				 FSpiderNavNode* NeighborNode = &(NavNodes[*NeighborIndex]);
@@ -77,7 +74,6 @@ void ASpiderNavigation::SetGridNodeNeighbors(int32 SavedIndex, TArray<int32> Nei
 			 }
 		}
 	}
-	
 }
 
 int32 ASpiderNavigation::GetNavNodesCount()
@@ -93,12 +89,10 @@ TArray<FVector> ASpiderNavigation::FindPath(FVector Start, FVector End, bool& bF
 	FSpiderNavNode* EndNode = FindClosestNode(End);
 	TArray<FSpiderNavNode*> NodesPath = FindNodesPath(StartNode, EndNode, bFoundCompletePath);
 
-	for (int32 i = 0; i < NodesPath.Num(); i++)
-	{
+	for (int32 i = 0; i < NodesPath.Num(); i++) {
 		FSpiderNavNode* Node = NodesPath[i];
 		Path.Add(Node->Location);
 	}
-		
 
 	return Path;
 }
@@ -168,8 +162,7 @@ TArray<FSpiderNavNode*> ASpiderNavigation::FindNodesPath(FSpiderNavNode* StartNo
 					openList.push_back(Neighbor);
 					std::push_heap(openList.begin(), openList.end(), LessThanByNodeF());
 					Neighbor->Opened = true;
-				}
-				else {
+				} else {
 					// the neighbor can be reached with smaller cost.
 					// Since its f value has been updated, we have to
 					// update its position in the open list
@@ -208,10 +201,8 @@ FSpiderNavNode* ASpiderNavigation::GetFromOpenList()
 {
 	float MinF = 9999999999.0f;
 	FSpiderNavNode* MinNode = NULL;
-	for (FSpiderNavNode* Node : OpenList)
-	{
-		if (Node->F < MinF)
-		{
+	for (FSpiderNavNode* Node : OpenList) {
+		if (Node->F < MinF) {
 			MinF = Node->F;
 			MinNode = Node;
 		}
@@ -219,7 +210,7 @@ FSpiderNavNode* ASpiderNavigation::GetFromOpenList()
 	if (MinNode) {
 		OpenList.Remove(MinNode);
 	}
-	
+
 	return MinNode;
 }
 
@@ -227,8 +218,7 @@ FSpiderNavNode* ASpiderNavigation::FindClosestNode(FVector Location)
 {
 	FSpiderNavNode* ClosestNode = nullptr;
 	float MinDistance = 999999999;
-	for (int32 i = 0; i != NavNodes.Num(); i++)
-	{
+	for (int32 i = 0; i != NavNodes.Num(); i++) {
 		float Distance = (NavNodes[i].Location - Location).Size();
 		if (Distance < MinDistance) {
 			MinDistance = Distance;
@@ -241,8 +231,7 @@ FSpiderNavNode* ASpiderNavigation::FindClosestNode(FVector Location)
 
 void ASpiderNavigation::ResetGridMetrics()
 {
-	for (int32 i = 0; i != NavNodes.Num(); ++i)
-	{
+	for (int32 i = 0; i != NavNodes.Num(); ++i) {
 		FSpiderNavNode Node = NavNodes[i];
 		Node.ResetMetrics();
 		NavNodes[i] = Node;
@@ -304,8 +293,7 @@ bool ASpiderNavigation::LoadGrid()
 	LoadGameInstance = Cast<USpiderNavGridSaveGame>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->SaveSlotName, LoadGameInstance->UserIndex));
 	if (LoadGameInstance) {
 		UE_LOG(SpiderNAV_LOG, Log, TEXT("After getting load game instance"));
-		for (auto It = LoadGameInstance->NavLocations.CreateConstIterator(); It; ++It)
-		{
+		for (auto It = LoadGameInstance->NavLocations.CreateConstIterator(); It; ++It) {
 			NormalRef = LoadGameInstance->NavNormals.Find(It.Key());
 			if (NormalRef) {
 				Normal = *NormalRef;
@@ -316,8 +304,7 @@ bool ASpiderNavigation::LoadGrid()
 		}
 		UE_LOG(SpiderNAV_LOG, Log, TEXT("After setting locations"));
 
-		for (auto It = LoadGameInstance->NavRelations.CreateConstIterator(); It; ++It)
-		{
+		for (auto It = LoadGameInstance->NavRelations.CreateConstIterator(); It; ++It) {
 			SetGridNodeNeighbors(It.Key(), It.Value().Neighbors);
 		}
 		UE_LOG(SpiderNAV_LOG, Log, TEXT("After setting relations"));
@@ -343,16 +330,14 @@ void ASpiderNavigation::DrawDebugRelations()
 	float DrawDuration = 20.0f;
 	bool DrawShadow = false;
 
-	for (int32 i = 0; i != NavNodes.Num(); ++i)
-	{
+	for (int32 i = 0; i != NavNodes.Num(); ++i) {
 		FSpiderNavNode Nav = NavNodes[i];
 
 		
 		//DrawDebugString(GetWorld(), Nav.Location, *FString::Printf(TEXT("[%d]"), Nav.Neighbors.Num()), NULL, DrawColor, DrawDuration, DrawShadow);
 
 
-		for (int32 j = 0; j != Nav.Neighbors.Num(); ++j)
-		{
+		for (int32 j = 0; j != Nav.Neighbors.Num(); ++j) {
 			FSpiderNavNode* NeighborNav = Nav.Neighbors[j];
 			DrawDebugLine(
 				GetWorld(),
