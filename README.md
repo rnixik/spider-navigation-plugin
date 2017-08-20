@@ -5,7 +5,7 @@ Navigation grid builds on floors, walls, ceilings.
 
 ![A demonstration of spider navigation](http://s.getid.org/github/spider-navigation-plugin.gif)
 
-## Now available on Marketplace [Marketplace](https://www.unrealengine.com/marketplace/spider-navigation)
+## Now available on [Marketplace](https://www.unrealengine.com/marketplace/spider-navigation)
 
 ## How it works
 
