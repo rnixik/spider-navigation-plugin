@@ -2,8 +2,8 @@ using UnrealBuildTool;
 
 public class SpiderNavigation : ModuleRules
 {
-    public SpiderNavigation(TargetInfo Target)
-	{
+    public SpiderNavigation(ReadOnlyTargetRules Target) : base(Target)
+    {
         PrivateIncludePaths.Add("SpiderNavigation/Private");
 
         PrivateDependencyModuleNames.AddRange(

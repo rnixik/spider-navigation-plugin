@@ -13,7 +13,7 @@
 	"CanContainContent": true,
 	"IsBetaVersion": false,
 	"Installed": false,
-	"EngineVersion" : "4.15.0",
+	"EngineVersion" : "4.17.0",
 	"Modules": [
 		{
 			"Name": "SpiderNavigation",
