@@ -20,9 +20,8 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //THE SOFTWARE.
 
-#include "SpiderNavigationModule.h"
 #include "SpiderNavGridTracer.h"
-
+#include "SpiderNavigationModule.h"
 
 // Sets default values
 ASpiderNavGridTracer::ASpiderNavGridTracer()

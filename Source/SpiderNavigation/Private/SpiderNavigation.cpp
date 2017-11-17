@@ -20,8 +20,8 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //THE SOFTWARE.
 
-#include "SpiderNavigationModule.h"
 #include "SpiderNavigation.h"
+#include "SpiderNavigationModule.h"
 
 DEFINE_LOG_CATEGORY(SpiderNAV_LOG);
 
