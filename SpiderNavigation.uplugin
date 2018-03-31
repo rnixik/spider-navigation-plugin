@@ -1,7 +1,7 @@
 {
 	"FileVersion": 3,
-	"Version": 2,
-	"VersionName": "1.1",
+	"Version": 4,
+	"VersionName": "1.2",
 	"FriendlyName": "SpiderNavigation",
 	"Description": "A custom navigation system suitable for spiders",
 	"Category": "Gameplay",
@@ -13,7 +13,7 @@
 	"CanContainContent": true,
 	"IsBetaVersion": false,
 	"Installed": false,
-	"EngineVersion" : "4.18.0",
+	"EngineVersion" : "4.19.0",
 	"Modules": [
 		{
 			"Name": "SpiderNavigation",
